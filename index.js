@@ -9,8 +9,8 @@ const word = {
     // 4: ...
 };
 
-const gray = [];
-const yellow = [];
+const gray = new Set();
+const yellow = new Set();
 
 let round = 0;
 
@@ -29,6 +29,19 @@ function findWord(info = []) {
     }
 
     info.forEach(({ letter, state }, i) => {
+        switch (state) {
+            case 0: // gray
+                gray.add(letter);
+                break;
+            
+            case 1: // yellow
+                yellow.add(letter);
+                break;
+            
+            case 2: // green
+                word[i] = letter;
+                break;
+        }
         if (state == 2) {
             word[i] = letter;
         }
