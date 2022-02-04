@@ -1,0 +1,13 @@
+{
+    "type": "module",
+    "name": "wordle-guesser-engine-guess-5-letter-words",
+    "version": "1.0.0",
+    "description": "Wordle is a game made by a person. https://www.powerlanguage.co.uk/wordle/",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
