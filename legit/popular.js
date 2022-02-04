@@ -20,7 +20,3 @@ export const popular = [
     "drape",
     "media"
 ];
-
-export const commonLetters = [
-    "e", "t", "a", "i", "o", "n", "s", "h", "r"
-];

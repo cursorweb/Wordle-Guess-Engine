@@ -11,19 +11,15 @@ function makeDate(e, a) {
     return Math.floor(t / 864e5);
 }
 
-// creates answer (Da)
-function makeAns(e) {
-    let a;
-    let s = makeIndex(e);
-    a = s % wordList.length;
-    return wordList[a - 1];
-}
-
 // creates index (Ga)
 function makeIndex(e) {
     return makeDate(epox, e);
 }
 
-// answer:
-// const d = prompt("Date (new Date): ");
-console.log(makeAns(new Date));
+// creates answer (Da)
+export function makeAns(e, tweak = -1) {
+    let a;
+    let s = makeIndex(e);
+    a = s % wordList.length;
+    return wordList[a + tweak];
+}

@@ -5,8 +5,8 @@
     "description": "Wordle Solver (Cheat and No Cheats)",
     "main": "index.js",
     "scripts": {
-        "run": "node cheat",
-        "cheat": "node ."
+        "legit": "node legit/run",
+        "cheat": "node cheat/run"
     },
     "keywords": [],
     "author": "Coder100",
