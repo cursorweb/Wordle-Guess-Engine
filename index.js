@@ -23,8 +23,12 @@ let round = 0;
 ]
 */
 function findWord(info = []) {
+    let r = round;
+
+    round++;
+
     // first
-    if (round == 0) {
+    if (r == 0) {
         return popular[Math.floor(Math.random() * popular.length)];
     }
 
@@ -42,12 +46,13 @@ function findWord(info = []) {
                 word[i] = letter;
                 break;
         }
-        if (state == 2) {
-            word[i] = letter;
-        }
     });
 
-    round++;
+    
+}
+
+function similarSearch(words) {
+
 }
 
 console.log(findWord());

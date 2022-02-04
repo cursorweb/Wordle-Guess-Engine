@@ -1,0 +1,30 @@
+# cheaty code
+// basically there is an La and Ta.
+// the La contains the word 'cycle' (the answer)
+// the Ta contains the valid words
+
+var La = [... wordle ...];
+var Ha = new Date(2021, 5, 19, 0, 0, 0, 0);
+
+// generates date
+function Na(e, a) {
+  var s = new Date(e);
+  var t = new Date(a).setHours(0, 0, 0, 0) - s.setHours(0, 0, 0, 0);
+  return Math.round(t / 864e5);
+}
+
+// creates answer
+function Da(e) {
+  var a;
+  var s = Ga(e);
+  a = s % La.length;
+  return La[a];
+}
+
+// creates index
+function Ga(e) {
+  return Na(Ha, e);
+}
+
+// answer:
+Da(new Date)

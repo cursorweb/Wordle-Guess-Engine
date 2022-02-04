@@ -1,0 +1,5 @@
+(give start word)
+using the info, find similar words
+- does not include x
+- includes x, but not at i pos
+- includes x at i
