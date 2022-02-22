@@ -5,16 +5,24 @@ export class Solver {
     constructor() {
         this.wordList = new Set(words);
 
-        this.word = {
+        this.word = [
             // 0: ...
             // 1: ...
             // 2: ...
             // 3: ...
             // 4: ...
-        };
+        ];
 
         this.gray = new Set();
         this.yellow = new Set();
+        this.yellowPos = [
+            // 0: new Set([a, b, ...])
+        ];
+
+        for (let i = 0; i < 5; i++) {
+            this.yellowPos[i] = new Set();
+        }
+
         this.round = 0;
     }
 
@@ -43,6 +51,7 @@ export class Solver {
                     break;
                 
                 case 2: // in word
+                    this.yellowPos[i].add(letter);
                     this.yellow.add(letter);
                     break;
                 
@@ -66,23 +75,77 @@ export class Solver {
     }
 
     findWord() {
-        const out = [];
+        let out = "";
+        let yellow = Infinity;
+        let green = -Infinity;
 
         for (const word of this.wordList) {
+            let potential = false;
+            let wyellow = 0;
+            let wgreen = 0;
+
             for (let i = 0; i < 5; i++) {
-                if (this.gray.has(word[i])) {
+                // this word must have a known wrong
+                if (
+                    this.gray.has(word[i])
+                    || this.yellowPos[i].has(word[i])
+                ) {
                     this.wordList.delete(word);
                     break; // already 'continue's
                 }
 
-                if (this.word[i] == word[i] || this.yellow.has(word[i])) {
-                    out.push(word);
+                // target greens
+                if (this.word[i] && this.word[i] != word[i]) {
+                    break;
+                }
+
+                if (this.word[i] == word[i]) {
+                    potential = true;
+                    wgreen++;
+                }
+
+                if (this.yellow.has(word[i])) {
+                    potential = true;
+                    wyellow++;
+                }
+            }
+
+            if (
+                potential &&
+                wyellow <= yellow && wgreen >= green
+            ) {
+                out = word;
+                yellow = wyellow;
+                green = wgreen;
+            }
+        }
+        
+        this.wordList.delete(out);
+        return out;
+    }
+
+    findWord2() {
+        let out = "";
+
+        for (const word of this.wordList) {
+            for (let i = 0; i < 5; i++) {
+                // this word must have a known wrong
+                if (
+                    this.gray.has(word[i])
+                    || this.yellowPos[i].has(word[i])
+                ) {
+                    this.wordList.delete(word);
+                    break; // already 'continue's
+                }
+
+                // target greens
+                if (this.word[i] && this.word[i] != word[i]) {
                     break;
                 }
             }
         }
-        
-        this.wordList.delete(out[0]);
-        return out[0];
+
+        this.wordList.delete(out);
+        return out;
     }
 }

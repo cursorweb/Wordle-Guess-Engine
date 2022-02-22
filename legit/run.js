@@ -1,26 +1,28 @@
 import { Solver } from "./index.js";
+import { words } from "./words.js";
 
-const answer = "sissy";
+const answer = words[Math.floor(Math.random() * words.length)];
 const solver = new Solver();
 
 let word;
 
 word = solver.iterate();
-console.log(word);
-word = solver.iterate(checkCorrect(word, answer));
-console.log(word);
-word = solver.iterate(checkCorrect(word, answer));
-console.log(word);
-word = solver.iterate(checkCorrect(word, answer));
-console.log(word);
-word = solver.iterate(checkCorrect(word, answer));
-console.log(word);
-word = solver.iterate(checkCorrect(word, answer));
-console.log(word);
+console.log("[1]", formatStr(word, answer));
+
+for (let i = 0; i < 4; i++) {
+    const res = checkCorrect(word, answer);
+    if (res == null) {
+        console.log("Guessed it!"); break;
+    }
+    word = solver.iterate(res);
+    console.log(`[${i + 2}]`, formatStr(word, answer));
+}
+
+console.log("Word was:", answer);
 
 function checkCorrect(word, answer) {
     if (word == answer) {
-        throw "Done!";
+        return null;
     }
     /*
     [
@@ -51,4 +53,22 @@ function checkCorrect(word, answer) {
     }
 
     return info;
+}
+
+function formatStr(word, answer) {
+    let out = "";
+
+    for (let i = 0; i < 5; i++) {
+        if (word[i] == answer[i]) {
+            out += "\x1b[32m";
+        } else if (answer.includes(word[i])) {
+            out += "\x1b[33m";
+        } else {
+            out += "\x1b[90m";
+        }
+        out += word[i];
+    }
+
+    out += `\x1b[0m`;
+    return out;
 }
