@@ -10,7 +10,7 @@
     },
     "keywords": [],
     "author": "Coder100",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "readline-sync": "^1.4.10"
     }

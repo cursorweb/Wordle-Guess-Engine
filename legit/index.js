@@ -1,61 +1,88 @@
 import { words } from "./words.js";
-import { popular, commonLetters } from "./popular.js";
+import { popular } from "./popular.js";
 
-const word = {
-    // 0: ...
-    // 1: ...
-    // 2: ...
-    // 3: ...
-    // 4: ...
-};
+export class Solver {
+    constructor() {
+        this.wordList = new Set(words);
 
-const gray = new Set();
-const yellow = new Set();
+        this.word = {
+            // 0: ...
+            // 1: ...
+            // 2: ...
+            // 3: ...
+            // 4: ...
+        };
 
-let round = 0;
-
-/*
-[
-    {
-        letter: "x",
-        state: 0, 0 = gray 1 = yellow 2 = green
-    }
-]
-*/
-function findWord(info = []) {
-    let r = round;
-
-    round++;
-
-    // first
-    if (r == 0) {
-        return popular[Math.floor(Math.random() * popular.length)];
+        this.gray = new Set();
+        this.yellow = new Set();
+        this.round = 0;
     }
 
-    info.forEach(({ letter, state }, i) => {
-        switch (state) {
-            case 0: // gray
-                gray.add(letter);
-                break;
-            
-            case 1: // yellow
-                yellow.add(letter);
-                break;
-            
-            case 2: // green
-                word[i] = letter;
-                break;
+    /*
+    this is ordered too btw, 0 = first word, 4 = last word
+    [
+        {
+            letter: "x",
+            state: 1, 1 = green, 2 = yellow 3 = gray
         }
-    });
+    ]
+    */
+    iterate(info = []) {
+        if (!this.isWrong(info)) this.round++;
+        if (this.round == 0) {
+            const word = popular[Math.floor(Math.random() * popular.length)];
+            this.wordList.delete(word); // exhausted
+            return word;
+        }
 
-    
+        info.forEach(({ letter, state }, i) => {
+            switch (state) {
+                case 1: // correct
+                    this.word[i] = letter;
+                    this.yellow.delete(letter);
+                    break;
+                
+                case 2: // in word
+                    this.yellow.add(letter);
+                    break;
+                
+                case 3: // wrong
+                    this.gray.add(letter);
+                    break;
+            }
+        });
+
+        return this.findWord();
+    }
+
+    isWrong(info) {
+        if (info.length == 0) return true;
+        
+        let wrongs = 0;
+        info.forEach(({ state }) => {
+            if (state == 3) wrongs++;
+        });
+        return wrongs == 5;
+    }
+
+    findWord() {
+        const out = [];
+
+        for (const word of this.wordList) {
+            for (let i = 0; i < 5; i++) {
+                if (this.gray.has(word[i])) {
+                    this.wordList.delete(word);
+                    break; // already 'continue's
+                }
+
+                if (this.word[i] == word[i] || this.yellow.has(word[i])) {
+                    out.push(word);
+                    break;
+                }
+            }
+        }
+        
+        this.wordList.delete(out[0]);
+        return out[0];
+    }
 }
-
-function similarSearch(words) {
-
-}
-
-console.log(findWord());
-console.log(findWord([{
-    letter: ""
-}]));

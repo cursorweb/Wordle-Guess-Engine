@@ -1,4 +1,4 @@
-run = "npm run cheat"
+run = "npm run legit"
 
 [nix]
 channel = "stable-21_11"
