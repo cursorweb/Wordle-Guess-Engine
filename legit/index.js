@@ -3,8 +3,8 @@ import { popular } from "./popular.js";
 
 export class Solver {
     constructor() {
-        // this.wordList = new Set(["cigar", "sissy", "focal"]);
-        // this.popular = new Set(["cigar"]);
+        // this.wordList = new Set(popular);
+        // this.popular = new Set(["arise"]);
         this.wordList = new Set(words);
         this.popular = new Set(popular);
 
@@ -75,11 +75,13 @@ export class Solver {
     genStart() {
         loop: for (const word of this.popular) {
             // cannot be wrong
-            // for (const letter of this.gray) {
-            //     if (word.includes(letter)) {
-            //         continue loop;
-            //     }
-            // }
+            for (const letter of this.gray) {
+                if (word.includes(letter)) {
+                    this.wordList.delete(word);
+                    this.popular.delet(word);
+                    continue loop;
+                }
+            }
 
             for (let i = 0; i < 5; i++) {
                 if (this.grayPos[i].has(word[i])) {
@@ -98,7 +100,8 @@ export class Solver {
             }
         }
 
-        const word = [...this.popular][0];
+        const wordArr = [...this.popular];
+        const word = wordArr[Math.floor(Math.random() * wordArr.length)];
         this.popular.delete(word);
         return word;
     }
@@ -116,11 +119,12 @@ export class Solver {
     findWord() {
         loop: for (const word of this.wordList) {
             // cannot be wrong
-            // for (const letter of this.gray) {
-            //     if (word.includes(letter)) {
-            //         continue loop;
-            //     }
-            // }
+            for (const letter of this.gray) {
+                if (word.includes(letter)) {
+                    this.wordList.delete(word);
+                    continue loop;
+                }
+            }
 
             for (let i = 0; i < 5; i++) {
                 if (this.grayPos[i].has(word[i])) {
@@ -145,87 +149,10 @@ export class Solver {
             }
         }
 
-        const out = [...this.wordList][0];
+        const outArr = [...this.wordList];
+        const out = outArr[Math.floor(Math.random() * outArr.length)];
         this.wordList.delete(out);
 
         return out;
     }
-
-    /*
-    findWord() {
-        let out = "";
-        let yellow = Infinity;
-        let green = -Infinity;
-
-        for (const word of this.wordList) {
-            let potential = false;
-            let wyellow = 0;
-            let wgreen = 0;
-
-            for (let i = 0; i < 5; i++) {
-                // this word must have a known wrong
-                if (
-                    this.gray.has(word[i])
-                    || this.yellowPos[i].has(word[i])
-                ) {
-                    this.wordList.delete(word);
-                    break; // already 'continue's
-                }
-
-                // target greens
-                // if (Math.random() < 0.7)
-                if (this.word[i] && this.word[i] != word[i]) {
-                    break;
-                }
-
-                if (this.word[i] == word[i]) {
-                    potential = true;
-                    wgreen++;
-                }
-
-                if (this.yellow.has(word[i])) {
-                    potential = true;
-                    wyellow++;
-                }
-            }
-
-            if (
-                potential &&
-                wyellow <= yellow && wgreen >= green
-            ) {
-                out = word;
-                yellow = wyellow;
-                green = wgreen;
-            }
-        }
-        
-        this.wordList.delete(out);
-        return out;
-    }
-
-    findWord2() {
-        let out = "";
-
-        for (const word of this.wordList) {
-            for (let i = 0; i < 5; i++) {
-                // this word must have a known wrong
-                if (
-                    this.gray.has(word[i])
-                    || this.yellowPos[i].has(word[i])
-                ) {
-                    this.wordList.delete(word);
-                    break; // already 'continue's
-                }
-
-                // target greens
-                if (this.word[i] && this.word[i] != word[i]) {
-                    break;
-                }
-            }
-        }
-
-        this.wordList.delete(out);
-        return out;
-    }
-    */
 }

@@ -1,4 +1,4 @@
-run = "node legit/test/ratio"
+run = "node legit/test/length"
 
 [nix]
 channel = "stable-21_11"
