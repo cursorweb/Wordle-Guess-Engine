@@ -4,18 +4,19 @@ import { words } from "./words.js";
 const answer = words[Math.floor(Math.random() * words.length)];
 const solver = new Solver();
 
-let word;
+let word, res;
 
 word = solver.iterate();
+res = checkCorrect(word, answer);
 console.log("[1]", formatStr(word, answer));
 
 for (let i = 0; i < 5; i++) {
-    const res = checkCorrect(word, answer);
+    word = solver.iterate(res);
+    res = checkCorrect(word, answer);
+    console.log(`[${i + 2}]`, formatStr(word, answer));
     if (res == null) {
         console.log("Guessed it!"); break;
     }
-    word = solver.iterate(res);
-    console.log(`[${i + 2}]`, formatStr(word, answer));
 }
 
 console.log("Word was:", answer);

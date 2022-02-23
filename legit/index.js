@@ -3,7 +3,10 @@ import { popular } from "./popular.js";
 
 export class Solver {
     constructor() {
+        // this.wordList = new Set(["cigar", "sissy", "focal"]);
+        // this.popular = new Set(["cigar"]);
         this.wordList = new Set(words);
+        this.popular = new Set(popular);
 
         this.word = [
             // 0: ...
@@ -13,14 +16,20 @@ export class Solver {
             // 4: ...
         ];
 
+        this.gray = new Set(); // wrong
+        this.yellow = new Set(); // in word
+        this.grayPos = [
+            // 0: new Set([...])
+        ]; // in word but not here
+        /*
         this.gray = new Set();
         this.yellow = new Set();
         this.yellowPos = [
             // 0: new Set([a, b, ...])
         ];
-
+        */
         for (let i = 0; i < 5; i++) {
-            this.yellowPos[i] = new Set();
+            this.grayPos[i] = new Set();
         }
 
         this.round = 0;
@@ -38,10 +47,7 @@ export class Solver {
     iterate(info = []) {
         if (!this.isWrong(info)) this.round++;
         if (this.round == 0) {
-            // const word = "alien";
-            const word = popular[Math.floor(Math.random() * popular.length)];
-            this.wordList.delete(word); // exhausted
-            return word;
+            return this.genStart();
         }
 
         info.forEach(({ letter, state }, i) => {
@@ -52,17 +58,49 @@ export class Solver {
                     break;
                 
                 case 2: // in word
-                    this.yellowPos[i].add(letter);
+                    this.grayPos[i].add(letter);
                     this.yellow.add(letter);
                     break;
                 
                 case 3: // wrong
+                    this.grayPos[i].add(letter);
                     this.gray.add(letter);
                     break;
             }
         });
 
         return this.findWord();
+    }
+
+    genStart() {
+        loop: for (const word of this.popular) {
+            // cannot be wrong
+            // for (const letter of this.gray) {
+            //     if (word.includes(letter)) {
+            //         continue loop;
+            //     }
+            // }
+
+            for (let i = 0; i < 5; i++) {
+                if (this.grayPos[i].has(word[i])) {
+                    this.wordList.delete(word);
+                    this.popular.delete(word);
+                    continue loop;
+                }
+            }
+
+            // must include potential
+            for (const potential of this.yellow) {
+                if (!word.includes(potential)) {
+                    this.wordList.delete(word);
+                    this.popular.delete(word);
+                }
+            }
+        }
+
+        const word = [...this.popular][0];
+        this.popular.delete(word);
+        return word;
     }
 
     isWrong(info) {
@@ -75,6 +113,45 @@ export class Solver {
         return wrongs == 5;
     }
 
+    findWord() {
+        loop: for (const word of this.wordList) {
+            // cannot be wrong
+            // for (const letter of this.gray) {
+            //     if (word.includes(letter)) {
+            //         continue loop;
+            //     }
+            // }
+
+            for (let i = 0; i < 5; i++) {
+                if (this.grayPos[i].has(word[i])) {
+                    this.wordList.delete(word);
+                    continue loop;
+                }
+            }
+
+            // must include green
+            for (let i = 0; i < 5; i++) {
+                if (this.word[i] != null && word[i] != this.word[i]) {
+                    this.wordList.delete(word);
+                    continue loop;
+                }
+            }
+            
+            // must include potential
+            for (const potential of this.yellow) {
+                if (!word.includes(potential)) {
+                    this.wordList.delete(word);
+                }
+            }
+        }
+
+        const out = [...this.wordList][0];
+        this.wordList.delete(out);
+
+        return out;
+    }
+
+    /*
     findWord() {
         let out = "";
         let yellow = Infinity;
@@ -96,7 +173,8 @@ export class Solver {
                 }
 
                 // target greens
-                if (Math.random() < 0.7) if (this.word[i] && this.word[i] != word[i]) {
+                // if (Math.random() < 0.7)
+                if (this.word[i] && this.word[i] != word[i]) {
                     break;
                 }
 
@@ -149,4 +227,5 @@ export class Solver {
         this.wordList.delete(out);
         return out;
     }
+    */
 }

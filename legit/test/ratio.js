@@ -11,15 +11,16 @@ for (let i = 0; i < 100; i++) {
     const solver = new Solver();
 
     let word = solver.iterate();
+    let res = checkCorrect(word, answer);
 
     for (let i = 0; i < 5 && next == false; i++) {
-        const res = checkCorrect(word, answer);
+        word = solver.iterate(res);
+        res = checkCorrect(word, answer);
         if (res == null) {
             next = true;
             correct++;
             break;
         }
-        word = solver.iterate(res);
     }
 
     if (!next) icorrect++;
