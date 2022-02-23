@@ -12,7 +12,7 @@ for (let i = 0; i < 100; i++) {
 
     let word = solver.iterate();
 
-    for (let i = 0; i < 4 && next == false; i++) {
+    for (let i = 0; i < 5 && next == false; i++) {
         const res = checkCorrect(word, answer);
         if (res == null) {
             next = true;

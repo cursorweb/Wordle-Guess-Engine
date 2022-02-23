@@ -38,6 +38,7 @@ export class Solver {
     iterate(info = []) {
         if (!this.isWrong(info)) this.round++;
         if (this.round == 0) {
+            // const word = "alien";
             const word = popular[Math.floor(Math.random() * popular.length)];
             this.wordList.delete(word); // exhausted
             return word;
@@ -95,7 +96,7 @@ export class Solver {
                 }
 
                 // target greens
-                if (this.word[i] && this.word[i] != word[i]) {
+                if (Math.random() < 0.7) if (this.word[i] && this.word[i] != word[i]) {
                     break;
                 }
 

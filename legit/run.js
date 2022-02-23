@@ -9,7 +9,7 @@ let word;
 word = solver.iterate();
 console.log("[1]", formatStr(word, answer));
 
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 5; i++) {
     const res = checkCorrect(word, answer);
     if (res == null) {
         console.log("Guessed it!"); break;
