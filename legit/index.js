@@ -47,9 +47,16 @@ export class Solver {
     iterate(info = []) {
         if (!this.isWrong(info)) this.round++;
         if (this.round == 0) {
+            this.interpret(info);
             return this.genStart();
         }
 
+        this.interpret(info);
+
+        return this.findWord();
+    }
+
+    interpret(info) {
         info.forEach(({ letter, state }, i) => {
             switch (state) {
                 case 1: // correct
@@ -68,8 +75,6 @@ export class Solver {
                     break;
             }
         });
-
-        return this.findWord();
     }
 
     genStart() {
@@ -78,7 +83,7 @@ export class Solver {
             for (const letter of this.gray) {
                 if (word.includes(letter)) {
                     this.wordList.delete(word);
-                    this.popular.delet(word);
+                    this.popular.delete(word);
                     continue loop;
                 }
             }
@@ -107,8 +112,6 @@ export class Solver {
     }
 
     isWrong(info) {
-        if (info.length == 0) return true;
-        
         let wrongs = 0;
         info.forEach(({ state }) => {
             if (state == 3) wrongs++;

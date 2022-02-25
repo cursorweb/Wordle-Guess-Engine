@@ -12,15 +12,24 @@ for (let i = 0; i < 100; i++) {
 
     let word = solver.iterate();
     let res = checkCorrect(word, answer);
-
-    for (let i = 0; i < 50; i++) {
-        word = solver.iterate(res);
-        res = checkCorrect(word, answer);
-        if (res == null) {
-            if (i < min) min = i;
-            if (i > max) max = i;
-            break;
+    
+    try {
+        for (let i = 0; i < 50; i++) {
+            word = solver.iterate(res);
+            res = checkCorrect(word, answer);
+            if (res == null) {
+                if (i < min) min = i;
+                if (i > max) max = i;
+                break;
+            }
         }
+    } catch {
+        console.log(`Error!
+Word was ${answer}
+Wordlist was ${[...solver.wordList].length}
+Yellow: ${[...solver.yellow]}
+Gray: ${[...solver.gray]}
+Green: ${[...solver.word]}`);
     }
 }
 

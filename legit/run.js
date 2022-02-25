@@ -2,7 +2,8 @@ import { Solver } from "./index.js";
 import { words } from "./words.js";
 import { popular } from "./popular.js";
 
-const answer = words[Math.floor(Math.random() * words.length)];
+const answer = "vivid";
+// const answer = words[Math.floor(Math.random() * words.length)];
 // const answer = popular[Math.floor(Math.random() * popular.length)];
 const solver = new Solver();
 
